@@ -4,7 +4,7 @@ import path from "path";
 const DIGESTS_DIR = "digests";
 const MANIFEST_PATH = "manifest.json";
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-const REPORT_FILES = ["ai-cli", "ai-agents", "ai-web", "ai-trending"] as const;
+const REPORT_FILES = ["ai-cli", "ai-agents", "ai-web", "ai-trending", "ai-hn"] as const;
 
 interface DateEntry {
   date: string;
