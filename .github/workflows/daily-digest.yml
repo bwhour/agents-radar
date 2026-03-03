@@ -57,9 +57,9 @@ jobs:
       - name: Update web manifest
         run: pnpm manifest
 
-      - name: Commit manifest
+      - name: Commit manifest and feed
         run: |
-          git add manifest.json
+          git add manifest.json feed.xml
           if ! git diff --cached --quiet; then
             git commit -m "chore: update manifest.json"
             git push
