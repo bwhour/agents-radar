@@ -110,7 +110,7 @@ PRs and issues are fetched without a date filter and sorted by popularity (comme
 
 ### OpenClaw + AI agent ecosystem (GitHub)
 
-OpenClaw is tracked as the primary reference project. Ten peer projects in the personal AI assistant / autonomous agent space are tracked alongside it for cross-ecosystem comparison.
+OpenClaw is tracked as the primary reference project, alongside several peer projects in the personal AI assistant / autonomous agent space for cross-ecosystem comparison.
 
 | Project | Repository | Stars |
 |---------|-----------|-------|
