@@ -1,6 +1,24 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import fs from "node:fs";
-import { is429, saveFile, autoGenFooter } from "../report.ts";
+
+// ---------------------------------------------------------------------------
+// Mock provider — intercepts createProvider() so the module-level `provider`
+// in report.ts uses our controllable mock instead of a real SDK client.
+// ---------------------------------------------------------------------------
+
+const { mockCall } = vi.hoisted(() => ({
+  mockCall: vi.fn<(prompt: string, maxTokens: number) => Promise<string>>(),
+}));
+
+vi.mock("../providers/index.ts", async (importOriginal) => {
+  const orig = await importOriginal<typeof import("../providers/index.ts")>();
+  return {
+    ...orig,
+    createProvider: () => ({ name: "mock", call: mockCall }),
+  };
+});
+
+import { is429, callLlm, saveFile, autoGenFooter } from "../report.ts";
 
 // ---------------------------------------------------------------------------
 // is429
@@ -27,6 +45,23 @@ describe("is429", () => {
 
   it("returns false for unrelated errors", () => {
     expect(is429(new Error("Something else"))).toBe(false);
+  });
+
+  it("detects OpenAI SDK RateLimitError shape (status + code)", () => {
+    const openaiError = Object.assign(new Error("Rate limit reached"), {
+      status: 429,
+      code: "rate_limit_exceeded",
+      type: "tokens",
+    });
+    expect(is429(openaiError)).toBe(true);
+  });
+
+  it("detects Anthropic SDK APIError shape (status + headers)", () => {
+    const anthropicError = Object.assign(new Error("rate_limit_error"), {
+      status: 429,
+      headers: { "retry-after": "30" },
+    });
+    expect(is429(anthropicError)).toBe(true);
   });
 });
 
@@ -98,5 +133,100 @@ describe("autoGenFooter", () => {
     const result = autoGenFooter("en");
     expect(result).toContain("auto-generated");
     expect(result).toContain("agents-radar");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// callLlm
+// ---------------------------------------------------------------------------
+
+describe("callLlm", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    mockCall.mockReset();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("passes prompt and maxTokens to provider.call()", async () => {
+    mockCall.mockResolvedValueOnce("response text");
+
+    const result = await callLlm("hello", 2048);
+
+    expect(result).toBe("response text");
+    expect(mockCall).toHaveBeenCalledOnce();
+    expect(mockCall).toHaveBeenCalledWith("hello", 2048);
+  });
+
+  it("uses default maxTokens of 4096", async () => {
+    mockCall.mockResolvedValueOnce("ok");
+
+    await callLlm("prompt");
+
+    expect(mockCall).toHaveBeenCalledWith("prompt", 4096);
+  });
+
+  it("retries on 429 with exponential backoff", async () => {
+    const err429 = Object.assign(new Error("rate limited"), { status: 429 });
+    mockCall.mockRejectedValueOnce(err429);
+    mockCall.mockResolvedValueOnce("success after retry");
+
+    const promise = callLlm("prompt", 1024);
+
+    // First call rejects with 429 — advance past the 5 s backoff
+    await vi.advanceTimersByTimeAsync(5_000);
+
+    const result = await promise;
+    expect(result).toBe("success after retry");
+    expect(mockCall).toHaveBeenCalledTimes(2);
+  });
+
+  it("retries up to MAX_RETRIES times then throws", async () => {
+    const err429 = Object.assign(new Error("rate limited"), { status: 429 });
+    mockCall
+      .mockRejectedValueOnce(err429)
+      .mockRejectedValueOnce(err429)
+      .mockRejectedValueOnce(err429)
+      .mockRejectedValueOnce(err429);
+
+    const promise = callLlm("prompt", 1024);
+    // Attach a no-op catch immediately so Node doesn't flag unhandled rejection
+    // before the expect() below gets a chance to inspect the rejection.
+    promise.catch(() => {});
+
+    // Advance through all 3 retry backoffs: 5s, 10s, 20s
+    await vi.advanceTimersByTimeAsync(5_000);
+    await vi.advanceTimersByTimeAsync(10_000);
+    await vi.advanceTimersByTimeAsync(20_000);
+
+    await expect(promise).rejects.toThrow("rate limited");
+    // 1 initial + 3 retries = 4 total calls
+    expect(mockCall).toHaveBeenCalledTimes(4);
+  });
+
+  it("throws immediately on non-429 errors", async () => {
+    mockCall.mockRejectedValueOnce(new Error("server error"));
+
+    await expect(callLlm("prompt")).rejects.toThrow("server error");
+    expect(mockCall).toHaveBeenCalledOnce();
+  });
+
+  it("does not leak concurrency slots on 429 retries", async () => {
+    const err429 = Object.assign(new Error("429"), { status: 429 });
+    mockCall.mockRejectedValueOnce(err429);
+    mockCall.mockResolvedValueOnce("ok");
+
+    const promise = callLlm("prompt");
+    await vi.advanceTimersByTimeAsync(5_000);
+    await promise;
+
+    // If slots leaked, subsequent calls would hang. Fire LLM_CONCURRENCY (5)
+    // calls to prove all slots are available.
+    mockCall.mockResolvedValue("ok");
+    const batch = Array.from({ length: 5 }, (_, i) => callLlm(`p${i}`));
+    const results = await Promise.all(batch);
+    expect(results).toEqual(["ok", "ok", "ok", "ok", "ok"]);
   });
 });
