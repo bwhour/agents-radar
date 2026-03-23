@@ -35,17 +35,18 @@ function getDateDirs(): string[] {
     .reverse();
 }
 
-/** Read and truncate a daily digest file. Returns null if not found. */
+/** Read and truncate all daily digest files for a date. Returns null if none found. */
 function readDailyDigest(date: string): string | null {
+  const parts: string[] = [];
   for (const type of ROLLUP_SOURCES) {
     const p = path.join(DIGESTS_DIR, date, `${type}.md`);
     if (fs.existsSync(p)) {
       const content = fs.readFileSync(p, "utf-8");
       const truncated = content.slice(0, MAX_CHARS_PER_REPORT);
-      return truncated.length < content.length ? truncated + "\n...[摘要截断]" : truncated;
+      parts.push(truncated.length < content.length ? truncated + "\n...[摘要截断]" : truncated);
     }
   }
-  return null;
+  return parts.length > 0 ? parts.join("\n\n") : null;
 }
 
 /** Read a weekly report file. Returns null if not found. */
@@ -78,24 +79,42 @@ async function generateRollupHighlights(
   itemsPerReport: number,
 ): Promise<void> {
   console.log(`  [${reportId}] Generating highlights for Telegram...`);
-  const highlights: Record<Lang, ReportHighlights> = { zh: {}, en: {} };
+
+  // Read existing highlights (e.g. from daily digest) so we merge instead of overwrite
+  const existingPath = path.join(DIGESTS_DIR, dateStr, "highlights.json");
+  let existing: Record<Lang, ReportHighlights> = { zh: {}, en: {} };
+  if (fs.existsSync(existingPath)) {
+    try {
+      existing = JSON.parse(fs.readFileSync(existingPath, "utf-8"));
+    } catch {
+      // ignore parse errors — start fresh
+    }
+  }
+
+  const highlights: Record<Lang, ReportHighlights> = {
+    zh: { ...existing.zh },
+    en: { ...existing.en },
+  };
+
   try {
     const [zhRaw, enRaw] = await Promise.all([
       callLlm(buildHighlightsPrompt({ [reportId]: zhContent }, "zh", itemsPerReport), 1024),
       callLlm(buildHighlightsPrompt({ [reportId]: enContent }, "en", itemsPerReport), 1024),
     ]);
-    highlights.zh = JSON.parse(
+    const zhNew = JSON.parse(
       zhRaw
         .replace(/```json?\n?/g, "")
         .replace(/```/g, "")
         .trim(),
-    );
-    highlights.en = JSON.parse(
+    ) as ReportHighlights;
+    const enNew = JSON.parse(
       enRaw
         .replace(/```json?\n?/g, "")
         .replace(/```/g, "")
         .trim(),
-    );
+    ) as ReportHighlights;
+    Object.assign(highlights.zh, zhNew);
+    Object.assign(highlights.en, enNew);
   } catch (err) {
     console.error(`  [${reportId}] Highlights generation failed: ${err}`);
   }
