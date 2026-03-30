@@ -3,8 +3,9 @@
  * articles from daily digests.
  *
  * Usage:
- *   pnpm xiaohongshu          # latest day → ai-xiaohongshu.md
- *   pnpm wechat               # last 7 days → ai-wechat.md (weekly)
+ *   pnpm xiaohongshu          # latest day → xiaohongshu
+ *   pnpm wechat               # last 7 days → wechat weekly
+ *   pnpm wechat:monthly       # last 30 days → wechat monthly
  *
  * Reads API keys from .env (local only).
  */
@@ -49,18 +50,18 @@ function loadReports(date: string, truncate = 3000): string {
   return sections.join("\n\n---\n\n");
 }
 
-function loadWeeklyReports(): { dateRange: string; content: string } {
-  const dates = getRecentDates(7);
+function loadMultiDayReports(days: number, truncate: number): { dateRange: string; content: string } {
+  const dates = getRecentDates(days);
   if (dates.length === 0) throw new Error("No digest directories found");
 
   const sections: string[] = [];
   for (const date of dates) {
-    const dayContent = loadReports(date, 2000);
+    const dayContent = loadReports(date, truncate);
     if (dayContent) {
       sections.push(`# ${date}\n\n${dayContent}`);
     }
   }
-  if (sections.length === 0) throw new Error("No reports found in the last 7 days");
+  if (sections.length === 0) throw new Error(`No reports found in the last ${days} days`);
 
   const dateRange = `${dates[dates.length - 1]} ~ ${dates[0]}`;
   return { dateRange, content: sections.join("\n\n===\n\n") };
@@ -148,7 +149,63 @@ ${reports}
 直接输出标题和正文，不要加额外说明。`;
 }
 
-type Platform = "xiaohongshu" | "wechat";
+function buildWechatMonthlyPrompt(dateRange: string, reports: string): string {
+  return `你是一位专注 AI 领域的公众号作者，文风专业但可读性强，擅长从一个月的海量信息中提炼出清晰的脉络和深刻的洞察。
+
+以下是 ${dateRange} 这一个月的 AI 生态日报原始内容（按日期倒序排列，每天的内容已做摘要）：
+
+${reports}
+
+---
+
+请基于以上一个月的内容，生成一篇微信公众号月报文章，要求：
+
+**标题**：专业有深度，20-35 字，体现本月最重要的主题，包含月份
+
+**正文**（5000-8000 字）：
+
+1. **月度总览**（300-500 字）：用清晰的叙事概括本月 AI 开源生态的整体走势，点明 3-5 个月度级别的关键事件或转折点
+
+2. **AI 编程工具演进**：本月各 CLI 工具的发展轨迹
+   - 重大版本发布和里程碑（按时间线梳理）
+   - 各工具的战略方向分化或趋同
+   - 月度活跃度变化和社区规模对比
+   - 值得关注的技术架构变化
+
+3. **AI Agent 生态格局**：本月 Agent 领域的全景分析
+   - 新入场的重要项目
+   - 生态格局变化（谁在上升、谁在沉寂）
+   - 技术路线之争（如果有）
+   - 商业化进展
+
+4. **开源趋势深度分析**：从一个月的 GitHub Trending 和 HN 数据中提炼规律
+   - 持续霸榜的项目（说明为什么能持续热门）
+   - 昙花一现 vs 持续增长的项目对比
+   - 本月涌现的新技术方向或范式
+   - 社区关注焦点的月度迁移
+
+5. **大厂动态回顾**：Anthropic、OpenAI 等公司本月的重要动作
+   - 产品发布节奏和战略意图
+   - 对开源生态的影响
+
+6. **月度深度观点**（500-800 字）：
+   - 本月最重要的 3 个趋势信号，逐一分析
+   - 从月度维度看到的、日报/周报看不到的规律
+   - 对未来 1-3 个月的预判
+   - 给不同角色的建议（开发者 / 技术管理者 / 创业者）
+
+**风格要求**：
+- 深度分析而非信息罗列，体现月度视角的独特价值
+- 使用 Markdown 格式，包括标题层级、加粗、列表
+- 每个章节之间用分隔线（---）隔开
+- 关键数据要保留，适当做月度对比
+- 有明确的观点和判断，不要只做信息搬运
+- 结尾附注：数据来源为 agents-radar 项目（https://github.com/duanyytop/agents-radar）
+
+直接输出标题和正文，不要加额外说明。`;
+}
+
+type Platform = "xiaohongshu" | "wechat" | "wechat:monthly";
 
 async function generate(platform: Platform): Promise<void> {
   if (platform === "xiaohongshu") {
@@ -162,20 +219,30 @@ async function generate(platform: Platform): Promise<void> {
     const content = await callLlm(buildXiaohongshuPrompt(reports, date), 4096);
     const filepath = saveSocialFile(content, `${date}-xiaohongshu.md`);
     console.log(`[social] Saved to ${filepath}`);
-  } else {
-    const { dateRange, content: reports } = loadWeeklyReports();
+  } else if (platform === "wechat") {
+    const { dateRange, content: reports } = loadMultiDayReports(7, 2000);
     const latestDate = getRecentDates(1)[0]!;
 
     console.log(`[social] Generating wechat weekly article for ${dateRange}…`);
     const content = await callLlm(buildWechatPrompt(dateRange, reports), 16384);
     const filepath = saveSocialFile(content, `${latestDate}-wechat.md`);
     console.log(`[social] Saved to ${filepath}`);
+  } else {
+    // wechat:monthly — use 30 days, smaller truncation per day to fit context
+    const { dateRange, content: reports } = loadMultiDayReports(30, 1000);
+    const latestDate = getRecentDates(1)[0]!;
+
+    console.log(`[social] Generating wechat monthly article for ${dateRange}…`);
+    const content = await callLlm(buildWechatMonthlyPrompt(dateRange, reports), 16384);
+    const filepath = saveSocialFile(content, `${latestDate}-wechat-monthly.md`);
+    console.log(`[social] Saved to ${filepath}`);
   }
 }
 
+const VALID_PLATFORMS: Platform[] = ["xiaohongshu", "wechat", "wechat:monthly"];
 const platform = process.argv[2] as Platform | undefined;
-if (!platform || !["xiaohongshu", "wechat"].includes(platform)) {
-  console.error("Usage: tsx src/social.ts <xiaohongshu|wechat>");
+if (!platform || !VALID_PLATFORMS.includes(platform)) {
+  console.error("Usage: tsx src/social.ts <xiaohongshu|wechat|wechat:monthly>");
   process.exit(1);
 }
 
