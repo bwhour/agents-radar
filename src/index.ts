@@ -30,10 +30,11 @@ import {
 import { buildTrendingPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
 import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING } from "./report.ts";
 import { buildCliReportContent, buildOpenclawReportContent } from "./report-builders.ts";
-import { saveWebReport, saveTrendingReport, saveHnReport } from "./report-savers.ts";
+import { saveWebReport, saveTrendingReport, saveHnReport, savePhReport } from "./report-savers.ts";
 import { loadWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
+import { fetchPhData, type PhData } from "./ph.ts";
 import { loadConfig } from "./config.ts";
 import { toCstDateStr, toUtcStr } from "./date.ts";
 import { type Lang, MSG, ISSUE_LABELS, CLI_ISSUE_TITLE, OPENCLAW_ISSUE_TITLE } from "./i18n.ts";
@@ -72,29 +73,40 @@ async function fetchAllData(
   webResults: WebFetchResult[];
   trendingData: TrendingData;
   hnData: HnData;
+  phData: PhData;
 }> {
   const allConfigs = [...CLI_REPOS, OPENCLAW, ...OPENCLAW_PEERS];
-  console.log(`  Tracking: ${allConfigs.map((r) => r.id).join(", ")}, claude-code-skills, web, hn`);
+  console.log(`  Tracking: ${allConfigs.map((r) => r.id).join(", ")}, claude-code-skills, web, hn, ph`);
 
-  const [fetched, skillsData, webResults, trendingData, hnData] = await Promise.all([
+  const [fetched, skillsData, webResults, trendingData, hnData, phData] = await Promise.all([
     Promise.all(
       allConfigs.map(async (cfg) => {
-        const [issuesRaw, prs, releases] = await Promise.all([
-          fetchRecentItems(cfg, "issues", since),
-          fetchRecentItems(cfg, "pulls", since),
-          fetchRecentReleases(cfg.repo, since),
-        ]);
-        const issues = issuesRaw.filter((i) => !i.pull_request);
-        console.log(
-          `  [${cfg.id}] issues: ${issues.length}, prs: ${prs.length}, releases: ${releases.length}`,
-        );
-        return { cfg, issues, prs, releases };
+        try {
+          const [issuesRaw, prs, releases] = await Promise.all([
+            fetchRecentItems(cfg, "issues", since),
+            fetchRecentItems(cfg, "pulls", since),
+            fetchRecentReleases(cfg.repo, since),
+          ]);
+          const issues = issuesRaw.filter((i) => !i.pull_request);
+          console.log(
+            `  [${cfg.id}] issues: ${issues.length}, prs: ${prs.length}, releases: ${releases.length}`,
+          );
+          return { cfg, issues, prs, releases };
+        } catch (err) {
+          console.error(`  [${cfg.id}] fetch failed: ${err}`);
+          return { cfg, issues: [], prs: [], releases: [] };
+        }
       }),
     ),
-    fetchSkillsData(CLAUDE_SKILLS_REPO).then((d) => {
-      console.log(`  [claude-code-skills] prs: ${d.prs.length}, issues: ${d.issues.length}`);
-      return d;
-    }),
+    fetchSkillsData(CLAUDE_SKILLS_REPO)
+      .then((d) => {
+        console.log(`  [claude-code-skills] prs: ${d.prs.length}, issues: ${d.issues.length}`);
+        return d;
+      })
+      .catch((err) => {
+        console.error(`  [claude-code-skills] fetch failed: ${err}`);
+        return { prs: [] as GitHubItem[], issues: [] as GitHubItem[] };
+      }),
     Promise.all([
       fetchSiteContent("anthropic", webState).catch((err): WebFetchResult => {
         console.error(`  [web/anthropic] fetch failed: ${err}`);
@@ -119,9 +131,10 @@ async function fetchAllData(
       }),
     ),
     fetchHnData().catch((): HnData => ({ stories: [], fetchSuccess: false })),
+    fetchPhData().catch((): PhData => ({ products: [], fetchSuccess: false })),
   ]);
 
-  return { fetched, skillsData, webResults, trendingData, hnData };
+  return { fetched, skillsData, webResults, trendingData, hnData, phData };
 }
 
 // ---------------------------------------------------------------------------
@@ -243,7 +256,10 @@ async function main(): Promise<void> {
 
   // 1. Fetch all data in parallel
   const webState = loadWebState();
-  const { fetched, skillsData, webResults, trendingData, hnData } = await fetchAllData(since, webState);
+  const { fetched, skillsData, webResults, trendingData, hnData, phData } = await fetchAllData(
+    since,
+    webState,
+  );
 
   const peerIds = new Set(OPENCLAW_PEERS.map((p) => p.id));
   const fetchedCli = fetched.filter((f) => f.cfg.id !== OPENCLAW.id && !peerIds.has(f.cfg.id));
@@ -341,6 +357,8 @@ async function main(): Promise<void> {
     ),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("zh"), "zh"),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
+    savePhReport(phData, utcStr, dateStr, digestRepo, autoGenFooter("zh"), "zh"),
+    savePhReport(phData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
   ]);
 
   // 5. Generate highlights for Telegram notification
@@ -355,6 +373,7 @@ async function main(): Promise<void> {
     ["ai-trending", "ai-trending.md", "ai-trending-en.md"],
     ["ai-web", "ai-web.md", "ai-web-en.md"],
     ["ai-hn", "ai-hn.md", "ai-hn-en.md"],
+    ["ai-ph", "ai-ph.md", "ai-ph-en.md"],
   ] as const) {
     const zh = readReport(zhFile);
     const en = readReport(enFile);

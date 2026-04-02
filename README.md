@@ -80,11 +80,20 @@ pnpm install
 wrangler deploy
 ```
 
-## Telegram Channel
+## Telegram Channel & Feishu Group
 
-**[t.me/agents_radar](https://t.me/agents_radar)**
+Subscribe to get daily digest notifications pushed directly to your preferred platform. Each message links to all reports for that day (ZH and EN variants) plus the Web UI and RSS feed.
 
-Subscribe to get daily digest notifications pushed directly to Telegram. Each message links to all reports for that day (ZH and EN variants) plus the Web UI and RSS feed.
+<table>
+  <tr>
+    <td align="center"><b><a href="https://t.me/agents_radar">Join Telegram Channel</a></b></td>
+    <td align="center"><b><a href="https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=a00hcab4-86de-4a3f-b599-e46146a69b98">Join Feishu Group</a></b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/telegram.jpg" width="300" alt="Telegram notification"></td>
+    <td><img src="assets/feishu.jpg" width="300" alt="Feishu notification"></td>
+  </tr>
+</table>
 
 ## Tracked sources
 
@@ -98,6 +107,7 @@ Subscribe to get daily digest notifications pushed directly to Telegram. Each me
 | GitHub Copilot CLI | [github/copilot-cli](https://github.com/github/copilot-cli) |
 | Kimi Code CLI | [MoonshotAI/kimi-cli](https://github.com/MoonshotAI/kimi-cli) |
 | OpenCode | [anomalyco/opencode](https://github.com/anomalyco/opencode) |
+| Pi | [badlogic/pi-mono](https://github.com/badlogic/pi-mono) |
 | Qwen Code | [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code) |
 
 ### Claude Code Skills (GitHub)
@@ -116,7 +126,6 @@ OpenClaw is tracked as the primary reference project, alongside several peer pro
 |---------|-----------|-------|
 | OpenClaw | [openclaw/openclaw](https://github.com/openclaw/openclaw) | 240.5k |
 | NanoBot | [HKUDS/nanobot](https://github.com/HKUDS/nanobot) | 26.9k |
-| Zeroclaw | [zeroclaw-labs/zeroclaw](https://github.com/zeroclaw-labs/zeroclaw) | 21.2k |
 | PicoClaw | [sipeed/picoclaw](https://github.com/sipeed/picoclaw) | 21.1k |
 | NanoClaw | [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw) | 16.6k |
 | NullClaw | [nullclaw/nullclaw](https://github.com/nullclaw/nullclaw) | 6.1k |
@@ -201,6 +210,7 @@ Go to **Settings → Secrets and variables → Actions** and add:
 | `OPENROUTER_API_KEY` | if OpenRouter | OpenRouter API key |
 | `TELEGRAM_BOT_TOKEN` | optional | Telegram bot token from [@BotFather](https://t.me/BotFather). If set, a message is sent after each digest run |
 | `TELEGRAM_CHAT_ID` | optional | Telegram chat/channel/group ID to send notifications to |
+| `FEISHU_WEBHOOK_URL` | optional | Feishu custom bot webhook URL. If set, a card message is sent after each digest run |
 
 > `GITHUB_TOKEN` is provided automatically by GitHub Actions. When using `github-copilot` as the provider, the same `GITHUB_TOKEN` is used for LLM calls.
 
