@@ -143,6 +143,7 @@ OpenClaw is tracked as the primary reference project, alongside several peer pro
 |---------|-----------|-------|
 | OpenClaw | [openclaw/openclaw](https://github.com/openclaw/openclaw) | 348.1k |
 | NanoBot | [HKUDS/nanobot](https://github.com/HKUDS/nanobot) | 37.9k |
+| Hermes Agent | [nousresearch/hermes-agent](https://github.com/nousresearch/hermes-agent) | 32.3k |
 | PicoClaw | [sipeed/picoclaw](https://github.com/sipeed/picoclaw) | 27.5k |
 | NanoClaw | [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw) | 26.5k |
 | CoPaw | [agentscope-ai/CoPaw](https://github.com/agentscope-ai/CoPaw) | 14.4k |
@@ -182,7 +183,7 @@ New articles are detected by comparing sitemap `lastmod` timestamps against a pe
 - Fetches issues, pull requests, and releases updated in the last 24 hours across all tracked repos
 - Tracks trending Claude Code Skills — sorted by community engagement, not recency
 - Generates a per-tool summary for each CLI repository and a cross-tool comparative analysis
-- Generates a deep OpenClaw project report plus a cross-ecosystem comparison against 10 peer projects
+- Generates a deep OpenClaw project report plus a cross-ecosystem comparison against 11 peer projects
 - Scrapes official Anthropic and OpenAI web content via sitemaps; detects new articles incrementally
 - Monitors GitHub Trending daily + searches 6 AI topic tags; classifies repos by dimension and extracts trend signals
 - Fetches top-30 AI stories from Hacker News (last 24h, ranked by points); generates community sentiment report
@@ -294,7 +295,7 @@ Files are written to `digests/YYYY-MM-DD/`:
 | File | Content | GitHub Issue label |
 |------|---------|-------------------|
 | `ai-cli.md` | CLI digest — cross-tool comparison + per-tool details | `digest` |
-| `ai-agents.md` | OpenClaw deep report + cross-ecosystem comparison + 10 peer details | `openclaw` |
+| `ai-agents.md` | OpenClaw deep report + cross-ecosystem comparison + 11 peer details | `openclaw` |
 | `ai-web.md` | Official web content report (only written when new content exists) | `web` |
 | `ai-trending.md` | GitHub AI trending report — repos classified by dimension + trend signals (only written when data is available) | `trending` |
 | `ai-hn.md` | Hacker News AI community digest — top stories + sentiment analysis (only written when fetch succeeds) | `hn` |
@@ -344,8 +345,9 @@ Issues: N | PRs: N | Projects covered: 10
   <details> EasyClaw   — ...
   <details> LobsterAI  — ...
   <details> ZeptoClaw  — ...
-  <details> NanoBot    — ...
-  <details> PicoClaw   — ...
+  <details> NanoBot      — ...
+  <details> Hermes Agent — ...
+  <details> PicoClaw     — ...
   <details> NanoClaw   — ...
   <details> IronClaw   — ...
   <details> TinyClaw   — ...
