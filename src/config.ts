@@ -58,6 +58,7 @@ const DEFAULT_OPENCLAW: RepoConfig = {
 
 const DEFAULT_OPENCLAW_PEERS: RepoConfig[] = [
   { id: "nanobot", repo: "HKUDS/nanobot", name: "NanoBot", paginated: true },
+  { id: "hermes-agent", repo: "nousresearch/hermes-agent", name: "Hermes Agent" },
   { id: "picoclaw", repo: "sipeed/picoclaw", name: "PicoClaw", paginated: true },
   { id: "nanoclaw", repo: "qwibitai/nanoclaw", name: "NanoClaw" },
   { id: "nullclaw", repo: "nullclaw/nullclaw", name: "NullClaw" },

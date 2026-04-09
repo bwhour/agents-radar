@@ -55,6 +55,9 @@ openclaw_peers:
     repo: HKUDS/nanobot
     name: NanoBot
     paginated: true
+  - id: hermes-agent
+    repo: nousresearch/hermes-agent
+    name: Hermes Agent
   - id: picoclaw
     repo: sipeed/picoclaw
     name: PicoClaw
