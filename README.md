@@ -34,7 +34,7 @@ Subscribe to get daily digest notifications pushed directly to your preferred pl
 <table>
   <tr>
     <td align="center"><b><a href="https://t.me/agents_radar">Join Telegram Channel</a></b></td>
-    <td align="center"><b><a href="https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=a00hcab4-86de-4a3f-b599-e46146a69b98">Join Feishu Group</a></b></td>
+    <td align="center"><b><a href="https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=478g7865-04a8-4fab-a7f8-23af85ba927b">Join Feishu Group</a></b></td>
   </tr>
   <tr>
     <td><img src="assets/telegram.jpg" width="300" alt="Telegram notification"></td>
@@ -146,6 +146,7 @@ OpenClaw is tracked as the primary reference project, alongside several peer pro
 | Hermes Agent | [nousresearch/hermes-agent](https://github.com/nousresearch/hermes-agent) | 32.3k |
 | PicoClaw | [sipeed/picoclaw](https://github.com/sipeed/picoclaw) | 27.5k |
 | NanoClaw | [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw) | 26.5k |
+| ZeroClaw | [zeroclaw-labs/zeroclaw](https://github.com/zeroclaw-labs/zeroclaw) | 30.1k |
 | CoPaw | [agentscope-ai/CoPaw](https://github.com/agentscope-ai/CoPaw) | 14.4k |
 | IronClaw | [nearai/ironclaw](https://github.com/nearai/ironclaw) | 11.4k |
 | NullClaw | [nullclaw/nullclaw](https://github.com/nullclaw/nullclaw) | 7.0k |
