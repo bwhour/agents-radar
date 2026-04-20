@@ -55,6 +55,14 @@
       "开发者3周构建AI代理密钥治理层",
       "神经科学启发记忆系统工程化落地",
       "最小上下文原则破解长时代理上下文墙"
+    ],
+    "ai-weekly": [
+      "Claude Opus 4.7发布，定位最难编程任务自主托付",
+      "Anthropic推出Claude Design，对标Figma/Canva",
+      "OpenAI Codex升级为通用编程助手，同日发GPT-Rosalind",
+      "OpenAI高管离职潮与Cerebras巨额芯片采购形成反差",
+      "Qwen Code OAuth免费层停用引发401认证雪崩",
+      "Anthropic LTBT获董事会多数席位，诺华CEO入驻"
     ]
   },
   "en": {
@@ -113,6 +121,14 @@
       "Earth Day AI projects tackle sustainability use cases",
       "API key governance, LLM budgeting go operational",
       "Claude Design deep dives for non-designers trend"
+    ],
+    "ai-weekly": [
+      "Anthropic launches Claude Opus 4.7 with safety framework",
+      "OpenAI expands Codex to general-purpose agent",
+      "OpenAI debuts GPT-Rosalind life sciences model",
+      "Anthropic launches Claude Design visual tool",
+      "Anthropic appoints Novartis CEO to board",
+      "Qwen Code free tier termination causes crisis"
     ]
   }
 }
