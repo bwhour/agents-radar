@@ -1,20 +1,20 @@
 {
   "zh": {
     "ai-cli": [
-      "OpenAI Codex 8连发Handler重构，推rust-v0.126.0-alpha.3",
-      "GitHub Copilot CLI Issues激增27条，Autopilot计费黑洞危机",
-      "OpenCode v1.14.26发布，AST原生编辑工具创新",
-      "Qwen Code v0.15.3 I/O性能飙升91%，免费额度引119评论",
-      "Kimi CLI推Tauri桌面端+git worktree，K2.6却服务故障",
-      "Pi落地MCP扩展协议，设计TUI扩展API"
+      "Claude Code HERMES.md计费bug致$200异常扣费",
+      "OpenAI Codex MCP架构8连发Handler大重构",
+      "Kimi CLI本周PR吞吐量全场最高23-27/日",
+      "Gemini CLI v0.40.0-preview Windows体验紧急修复",
+      "GitHub Copilot CLI Autopilot无限循环扣费黑洞复发",
+      "OpenCode 24h内快速跟进DeepSeek/GPT-5.5适配"
     ],
     "ai-agents": [
-      "OpenClaw 24小时500 Issues+500 PR，TTS语音4连beta发",
-      "OpenClaw积压416条待合并PR，合并吞吐压力显著",
-      "OpenClaw新增7家TTS提供商含Azure、小米、火山引擎",
-      "OpenClaw修复cron漂移、MCP会话管理、PATH隔离",
-      "NanoBot、Hermes Agent等13个项目覆盖OpenClaw生态",
-      "OpenClaw /tts latest命令支持聊天级自动语音控制"
+      "OpenAI发布Workspace Agents企业级Agent基础设施",
+      "OpenAI WebSockets优化加速Agentic工作流性能",
+      "Kimi RalphFlow架构创新探索Tauri桌面端",
+      "Pi MCP扩展协议落地TUI扩展API设计",
+      "OpenCode AST原生编辑工具创新突破",
+      "Gemini CLI智能路由与记忆系统差异化竞争"
     ],
     "ai-trending": [
       "mattpocock/skills登顶Trending，AI基础工具+工作流双标签",
@@ -63,6 +63,38 @@
       "70%企业RAG部署生产前失败，根因剖析",
       "5种RAG失败模式附缓解代码，超越教程幸存者偏差",
       "Transformer理论特性与AI安全零日末日思辨"
+    ],
+    "ai-weekly": [
+      "Anthropic与Amazon签十年5GW千亿美元算力协议",
+      "Anthropic Mythos网络安全模型遭未授权访问泄露",
+      "OpenAI发布GPT-5.5系列含Bio Bug Bounty",
+      "OpenAI放弃SWE-bench Verified前沿编程评估标准",
+      "Google计划最高400亿美元投资Anthropic",
+      "Anthropic罕见公开复盘Claude Code质量退化原因"
+    ],
+    "ai-models": [
+      "GPT-5.5正式发布但ARC-AGI-3分数缺席引质疑",
+      "Anthropic Mythos网络安全专用模型泄露引全球警报",
+      "Claude Code Opus 4.7延迟回归推理强度降级",
+      "Kimi K2.6服务故障终端挂死稳定性债务累积",
+      "OpenAI GPT-5.5适配承压5小时额度20分钟耗尽",
+      "DeepSeek快速获OpenCode等工具24h内接入跟进"
+    ],
+    "ai-infra": [
+      "Anthropic AWS Trainium路线全面绑定明确拒绝自研芯片",
+      "OpenAI Codex从Node向Rust迁移加速双端版本割裂",
+      "Pi终端兼容性矩阵维护负担重Issue量持续最高40-50/日",
+      "Kimi git worktree支持商业化压力显性化",
+      "OpenCode tmux兼容性危机v1.14.24-26紧急补丁",
+      "Gemini CLI Ollama本地压缩MCP命名规范化"
+    ],
+    "ai-policy": [
+      "OpenAI新增Our Principles政策页面防御监管窗口期",
+      "Anthropic透明优先策略对冲信任危机首次公开复盘",
+      "OpenAI自曝基准通胀困境引发评测体系可信度反思",
+      "Anthropic资本热捧与用户投诉冰火两重天",
+      "Google 400亿美元投资AI资本集中度达新高度",
+      "Anthropic Mythos泄露触发能力越强泄露越危险讨论"
     ]
   },
   "en": {
@@ -129,6 +161,14 @@
       "Reverse-engineering OpenClaw reveals hidden architecture",
       "Enterprise access control patterns for self-hosted agents",
       "Claude Code MCP server ecosystems maturing"
+    ],
+    "ai-weekly": [
+      "Anthropic-Amazon sign $100B+ infrastructure deal",
+      "OpenAI releases GPT-5.5 with 1M context window",
+      "Anthropic admits Claude Code quality regressions",
+      "Mythos model leak triggers security alarm",
+      "Google plans $40B Anthropic investment",
+      "OpenAI abandons SWE-bench Verified benchmark"
     ]
   }
 }
