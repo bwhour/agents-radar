@@ -1,0 +1,134 @@
+{
+  "zh": {
+    "ai-cli": [
+      "OpenAI Codex 8连发Handler重构，推rust-v0.126.0-alpha.3",
+      "GitHub Copilot CLI Issues激增27条，Autopilot计费黑洞危机",
+      "OpenCode v1.14.26发布，AST原生编辑工具创新",
+      "Qwen Code v0.15.3 I/O性能飙升91%，免费额度引119评论",
+      "Kimi CLI推Tauri桌面端+git worktree，K2.6却服务故障",
+      "Pi落地MCP扩展协议，设计TUI扩展API"
+    ],
+    "ai-agents": [
+      "OpenClaw 24小时500 Issues+500 PR，TTS语音4连beta发",
+      "OpenClaw积压416条待合并PR，合并吞吐压力显著",
+      "OpenClaw新增7家TTS提供商含Azure、小米、火山引擎",
+      "OpenClaw修复cron漂移、MCP会话管理、PATH隔离",
+      "NanoBot、Hermes Agent等13个项目覆盖OpenClaw生态",
+      "OpenClaw /tts latest命令支持聊天级自动语音控制"
+    ],
+    "ai-trending": [
+      "mattpocock/skills登顶Trending，AI基础工具+工作流双标签",
+      "Alishahryar1/free-claude-code上榜，免费替代方案受关注",
+      "openclaw/openclaw同时入围Trending与主题搜索",
+      "ComposioHQ/awesome-codex-skills聚焦Codex技能生态",
+      "trycua/cua智能体工作流工具跻身热门",
+      "Qwen3.6生态占主题搜索近三分之一，27B/35B-A3B领跑"
+    ],
+    "ai-web": [
+      "OpenAI新增/our-principles/路径，监管窗口期释放政策信号",
+      "OpenAI原则页面定位持久声明，或更新2018年Charter",
+      "Anthropic连续零更新，Claude 4重大发布静默期临近",
+      "Anthropic 2025Q1安全研究密集，储备监管合规技术论据",
+      "OpenAI 789条sitemap vs Anthropic 343条，内容体量差距显著",
+      "OpenAI /index/路径通常用于高优先级长期页面"
+    ],
+    "ai-hn": [
+      "OpenAI宣布放弃SWE-bench Verified，231分136评论引爆基准通胀论",
+      "Show HN: AI记忆模拟生物遗忘曲线，52%召回率引缺陷还是特性之争",
+      "Show HN: Semble代码搜索近transformer精度，专为agent设计",
+      "Claude Opus 4.7被疑静默降级，付费用户质量焦虑浮现",
+      "Anthropic SWE-bench声明被指统计谬误，社区较真基准严谨性",
+      "DeepSeek缓存价砍至1/10，价格战疲劳社区更关注技术实质"
+    ],
+    "ai-ph": [
+      "ZeroHuman 375票登顶，首创Vibe Coding工作流编排AI联合创始人",
+      "Clawdi 280票，浏览器端统一管理平台解决多Agent割裂",
+      "Google官方Gemini Personal Intelligence下场，270票生态原生",
+      "MiMo-V2.5 Voice开源路线，语音交互开放化",
+      "DeployStack开源部署栈，开发者基础设施",
+      "Euphony代码库AI音乐生成，编程+创作跨界"
+    ],
+    "ai-hf": [
+      "DeepSeek-V4-Pro 2843赞登顶，MIT许可证降低商用门槛",
+      "Qwen3.6-35B-A3B 118万下载夺冠，3B激活撬动35B性能",
+      "Google Gemma-4-31B 604万下载，边缘部署统治力验证",
+      "Kimi-K2.6 37万下载，compressed-tensors降显存",
+      "GLM-5.1 230865下载，DSA动态稀疏注意力革新长文本",
+      "MiniMax-M2.7 48万下载，国内厂商出海实用性验证"
+    ],
+    "ai-community": [
+      "OpenClaw逆向工程揭秘内部架构隐藏细节",
+      "企业级OpenClaw VPS安全部署实战指南",
+      "约束悖论：限制AI自由度反提升代码质量",
+      "70%企业RAG部署生产前失败，根因剖析",
+      "5种RAG失败模式附缓解代码，超越教程幸存者偏差",
+      "Transformer理论特性与AI安全零日末日思辨"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code faces billing and rate-limit crises",
+      "OpenAI Codex releases rust-v0.126",
+      "MCP becomes de facto integration standard",
+      "OpenCode and Pi lead open extensibility wave",
+      "9 active PRs on Claude Code mostly bounty",
+      "10 hot issues on OpenAI Codex streamlining"
+    ],
+    "ai-agents": [
+      "OpenClaw released 4 beta versions in one day",
+      "Major TTS infrastructure overhaul with 7 providers",
+      "500 issues and 500 PRs in 24 hours",
+      "423 open issues shows review backlog pressure",
+      "Voice customization with persona support added",
+      "Chat-scoped auto-TTS controls introduced"
+    ],
+    "ai-trending": [
+      "mattpocock/skills surges +2,519 stars today",
+      "free-claude-code trends with +1,701 stars",
+      "beads memory upgrade for coding agents gains traction",
+      "trycua/cua brings Computer-Use Agents practical",
+      "Codex skills ecosystem catalyzes standardization wave",
+      "ollama adds Kimi-K2.5, GLM-5, MiniMax support"
+    ],
+    "ai-web": [
+      "OpenAI publishes sole entry Our Principles",
+      "Anthropic publishes zero new articles today",
+      "OpenAI's high-velocity release cadence pauses",
+      "Single principles URL suggests repositioning",
+      "Strategic pause ahead of major announcements suspected",
+      "No substantive technical advancement from either lab"
+    ],
+    "ai-hn": [
+      "OpenAI declares SWE-bench Verified obsolete",
+      "DeepSeek drops 10x input cache price cut",
+      "Anthropic's SWE-bench claims face fatal error critique",
+      "Benchmark saturation debate intensifies community-wide",
+      "Developer tools fragmented across many small projects",
+      "AI memory and agent orchestration projects multiply"
+    ],
+    "ai-ph": [
+      "ZeroHuman tops votes as AI Co-Founder at 375",
+      "Google launches Gemini Personal Intelligence",
+      "Vibe coding appears in two product taglines",
+      "DeployStack offers open-source Vercel alternative",
+      "Regent monitors AI behavior for enterprises",
+      "Agentic AI systems replace single-purpose tools"
+    ],
+    "ai-hf": [
+      "Qwen 3.6 35B-A3B MoE hits 1.18M downloads",
+      "Gemma 4 series surpasses 10M combined downloads",
+      "DeepSeek-V4-Pro leads weekly likes at 2,843",
+      "GLM-5.1 gains traction as Chinese alternative",
+      "Uncensored and reasoning-distilled derivatives multiply",
+      "LLaDA 2.0 pushes any-to-any architecture boundaries"
+    ],
+    "ai-community": [
+      "OpenClaw challenge dominates Dev.to coverage",
+      "Gabriel Anhaia publishes 6 RAG failure articles",
+      "Lobste.rs debates AI doomsday zero day scenarios",
+      "Reverse-engineering OpenClaw reveals hidden architecture",
+      "Enterprise access control patterns for self-hosted agents",
+      "Claude Code MCP server ecosystems maturing"
+    ]
+  }
+}
